@@ -1,0 +1,2 @@
+# Only used to brand the Windows executable; the application does not need Python.
+Pillow==11.3.0
