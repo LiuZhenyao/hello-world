@@ -1,3 +1,9 @@
-# hello-world
-This is a simple exercise.
-Hello, everyone. My name is Liu Zhenyao. I'm delighted to be here at GitHub.
+# 星衡 OrbitLaser
+
+Windows 离线桌面版星间激光测量数据仿真工具，覆盖 LEO 至 GEO 轨道高度。
+
+此项目按原对话中的完整实现记录重建。原工作区不可访问、无可恢复文件快照；本分支用于逐模块保存重建成果，保持 `master` 不变。
+
+计划保留：六参数双体轨道传播、单向光行时修正、球形地球遮挡、高斯光束链路预算、定时/测距噪声、固定与时钟偏差、随机种子、三个场景预设、中文桌面工作台、轨道视图与回放、四种曲线、分页测量表、有效采样窗口、场景 JSON、CSV 和独立 HTML 报告。
+
+源码、中文字体及许可、配置、Windows 构建脚本和测试都保存在本分支。实施状态及测试记录将随模块更新；未经实际验证的行为不会标为已验证。

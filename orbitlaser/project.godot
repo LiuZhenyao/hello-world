@@ -1,0 +1,16 @@
+config_version=5
+[application]
+config/name="星衡 OrbitLaser"
+config/version="1.0.0"
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.6", "GL Compatibility")
+config/icon="res://assets/icon.svg"
+[display]
+window/size/viewport_width=1440
+window/size/viewport_height=920
+window/size/window_width_override=1440
+window/size/window_height_override=920
+window/stretch/mode="canvas_items"
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

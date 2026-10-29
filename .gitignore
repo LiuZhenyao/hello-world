@@ -1,0 +1,5 @@
+orbitlaser/.godot/
+.build/
+build/
+__pycache__/
+*.pyc
