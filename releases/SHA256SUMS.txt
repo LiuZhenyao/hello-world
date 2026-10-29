@@ -1,3 +1,3 @@
-3ab9c182e5730dfd23214c1ae1a2efd48550bda18e78dec94cd9ba20cc3497d0  OrbitLaser-1.0-Windows-x64.zip
-801c1af47f5a0acdc8d800cf5abb5123153eee3acffc0dabd57a104c4ae2988c  OrbitLaser-1.0-Source.zip
-fdbc3f6c61ecb808209158931cfcaa6f1d203f7dccbe9ddfa4f57b2985245fa9  OrbitLaser.exe (inside Windows ZIP)
+02a617f608d007ae2cdc4b8dff19cddd9b7ba89b12e8ecc15834cb87de77fb24  OrbitLaser-1.0-Windows-x64.zip
+b640d772ce0335ef2796164b7adfee44f51417edadcd2ad3182c49d8e32298ac  OrbitLaser-1.0-Source.zip
+388285a9b72f27616973b08074b05081d40118e1451c4a99fc48a1a61a8fa3f6  卫星轨道模拟仿真教学软件/卫星轨道模拟仿真教学软件.exe
