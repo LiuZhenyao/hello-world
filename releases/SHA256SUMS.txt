@@ -1,0 +1,3 @@
+3ab9c182e5730dfd23214c1ae1a2efd48550bda18e78dec94cd9ba20cc3497d0  OrbitLaser-1.0-Windows-x64.zip
+801c1af47f5a0acdc8d800cf5abb5123153eee3acffc0dabd57a104c4ae2988c  OrbitLaser-1.0-Source.zip
+fdbc3f6c61ecb808209158931cfcaa6f1d203f7dccbe9ddfa4f57b2985245fa9  OrbitLaser.exe (inside Windows ZIP)
