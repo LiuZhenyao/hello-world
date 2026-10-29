@@ -16,13 +16,13 @@ def main():
     exe=BUILD/'OrbitLaser.exe'
     if not exe.is_file():raise SystemExit('Missing build/OrbitLaser.exe; run scripts/build.py first.')
     RELEASES.mkdir(exist_ok=True)
-    windows=RELEASES/'OrbitLaser-1.0-Windows-x64.zip'
-    source=RELEASES/'OrbitLaser-1.0-Source.zip'
+    windows=RELEASES/'卫星轨道模拟仿真教学软件-2.0-Windows-x64.zip'
+    source=RELEASES/'卫星轨道模拟仿真教学软件-2.0-源码.zip'
     with zipfile.ZipFile(windows,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
         z.write(exe,'卫星轨道模拟仿真教学软件/卫星轨道模拟仿真教学软件.exe')
         for p in sorted((ROOT/'docs').glob('*.md')):z.write(p,'卫星轨道模拟仿真教学软件/'+p.name)
         for p in sorted((ROOT/'orbitlaser/licenses').glob('*.txt')):z.write(p,'卫星轨道模拟仿真教学软件/许可/'+p.name)
-        for name in ['LEO-GEO.json','example-measurements.csv','example-report.html','OrbitLaser-workbench.png','OrbitLaser-data.png','ui-validation.json']:
+        for name in ['LEO-GEO.json','example-measurements.csv','example-report.html','OrbitLaser-workbench.png','OrbitLaser-data.png','OrbitLaser-network.png','ui-validation.json']:
             p=BUILD/'validation'/name
             if p.is_file():z.write(p,'卫星轨道模拟仿真教学软件/示例/'+name)
         for name in ['build-evidence.json','packaged-smoke.json']:

@@ -4,6 +4,8 @@ const INK=Color("253750")
 const MUTED=Color("7c8a9d")
 const TEAL=Color("0f9d91")
 const BLUE=Color("4285db")
+var network: Dictionary={}
+var selected_link=0
 var mode="orbit"
 var result: Dictionary={}
 var parameters: Dictionary={}
@@ -19,6 +21,7 @@ signal seek(index: int)
 func _ready():
  font=load("res://assets/ui.ttc")
  mouse_filter=Control.MOUSE_FILTER_STOP
+ clip_contents=true
  tooltip_text="拖动旋转轨道视图；滚轮缩放。曲线区域点击可定位时间。"
 
 func _gui_input(event):
@@ -28,8 +31,8 @@ func _gui_input(event):
    if mode!="orbit" and event.pressed and not result.is_empty():
     seek.emit(clampi(int((event.position.x-65)/max(size.x-90,1)*(result.count-1)),0,result.count-1))
   if mode=="orbit" and event.pressed:
-   if event.button_index==MOUSE_BUTTON_WHEEL_UP:zoom=clamp(zoom*1.1,0.6,2.2)
-   if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:zoom=clamp(zoom/1.1,0.6,2.2)
+   if event.button_index==MOUSE_BUTTON_WHEEL_UP:zoom=clamp(zoom*1.1,0.35,8.0)
+   if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:zoom=clamp(zoom/1.1,0.35,8.0)
    queue_redraw()
  if event is InputEventMouseMotion and dragging and mode=="orbit":
   yaw+=event.relative.x*0.008;pitch=clamp(pitch+event.relative.y*0.008,-1.4,1.4);queue_redraw()
@@ -53,49 +56,68 @@ func _draw():
 
 func draw_orbit():
  draw_style_box(style(Color("101e35"),14),Rect2(Vector2.ZERO,size))
- for n in range(90):
+ for n in range(110):
   var pt=Vector2(fposmod(n*137.19+41,size.x),fposmod(n*83.73+19,size.y))
   draw_circle(pt,0.6 if n%3 else 1.1,Color(0.53,0.66,0.84,0.22))
- text_at(Vector2(24,29),"地心惯性空间",Color("dbe8ff"),14)
- text_at(Vector2(24,50),"双体传播 · 单向 甲 → 乙",Color("8298b8"),11)
+ text_at(Vector2(20,27),"多轨道面星座 · 地心惯性空间",Color("dbe8ff"),14)
  if parameters.is_empty():return
+ var sats: Array=network.get("satellites",[parameters.a,parameters.b])
+ var planes: Array=parameters.get("planes",[parameters.a,parameters.b])
+ text_at(Vector2(20,47),"%d 个轨道面  /  %d 颗卫星  /  单向激光测量"%[planes.size(),sats.size()],Color("8298b8"),11)
  var center=Vector2(size.x*0.5,size.y*0.53)
- var outer: float=max((6378.137+parameters.a.alt)*(1+parameters.a.ecc),(6378.137+parameters.b.alt)*(1+parameters.b.ecc))
- var scale_v: float=min(size.x*0.43,size.y*0.62)/outer*zoom
- var radius: float=6378.137*scale_v
- var eq=PackedVector2Array()
- for j in range(97):eq.append(project_point([outer*cos(j*TAU/96),outer*sin(j*TAU/96),0],center,scale_v))
- draw_polyline(eq,Color(0.34,0.48,0.66,0.18),1.0,true)
- draw_circle(center,radius+5,Color(0.12,0.46,0.76,0.1))
- draw_circle(center,radius,Color("204f7c"))
+ var outer=0.0
+ for sat in sats:outer=maxf(outer,(Model.RE+sat.alt)*(1+sat.ecc))
+ var scale_v: float=min(size.x*0.43,size.y*0.53)/outer*zoom
+ var radius: float=Model.RE*scale_v
+ # Fine ECI reference grid and a shaded Earth with projected graticule.
+ for k in range(1,5):
+  var eq=PackedVector2Array()
+  for j in range(97):eq.append(project_point([outer*k/4.0*cos(j*TAU/96),outer*k/4.0*sin(j*TAU/96),0],center,scale_v))
+  draw_polyline(eq,Color(0.34,0.48,0.66,0.12),1.0,true)
+ draw_circle(center,radius+5,Color(0.12,0.46,0.76,0.12))
+ draw_circle(center,radius,Color("153f64"))
+ for k in range(12,0,-1):
+  draw_circle(center+Vector2(-radius*0.12,-radius*0.12),radius*k/13.0,Color(0.12,0.36,0.51,0.045))
  draw_arc(center,radius,0,TAU,90,Color("4f83ac"),1.0,true)
- for k in [-0.6,0.0,0.6]:
+ for k in [-0.75,-0.4,0.0,0.4,0.75]:
   var line=PackedVector2Array()
   for j in range(65):
    var ang=j*TAU/64
-   line.append(project_point([6378.137*sqrt(1-k*k)*cos(ang),6378.137*sqrt(1-k*k)*sin(ang),6378.137*k],center,scale_v))
-  draw_polyline(line,Color(0.4,0.68,0.84,0.32),1,true)
- var colors=[Color("52e1c3"),Color("7caaff")]
- var sats=[parameters.a,parameters.b]
+   line.append(project_point([Model.RE*sqrt(1-k*k)*cos(ang),Model.RE*sqrt(1-k*k)*sin(ang),Model.RE*k],center,scale_v))
+  draw_polyline(line,Color(0.4,0.68,0.84,0.28),1,true)
+ for k in range(6):
+  var line=PackedVector2Array()
+  for j in range(65):
+   var ang=j*TAU/64;var lon=k*PI/6
+   line.append(project_point([Model.RE*cos(ang)*cos(lon),Model.RE*cos(ang)*sin(lon),Model.RE*sin(ang)],center,scale_v))
+  draw_polyline(line,Color(0.4,0.68,0.84,0.17),1,true)
+ var palette=[Color("52e1c3"),Color("72aaff"),Color("f3c66c"),Color("d896f5"),Color("ff8d9d"),Color("a7dc7a"),Color("77d9e7"),Color("d6c6af")]
  var row: Dictionary=result.rows[cursor] if not result.is_empty() else {"t":0,"valid":false,"visible":false}
- var positions=[]
- for k in range(2):
-  var points=PackedVector2Array()
-  var period: float=TAU*sqrt(pow(6378.137+sats[k].alt,3)/398600.4418)
-  for j in range(241):points.append(project_point(Model.state(sats[k],j*period/240),center,scale_v))
-  draw_polyline(points,Color(colors[k],0.65),1.5,true)
-  positions.append(project_point(Model.state(sats[k],row.t),center,scale_v))
- var link_color=Color("52e1c3") if row.valid else Color("c56e6e")
- draw_dashed_line(positions[0],positions[1],Color(link_color,0.65),1.5,7,true)
- for k in range(2):
-  var pos: Vector2=positions[k]
-  draw_circle(pos,12,Color(colors[k],0.12));draw_circle(pos,4.5,colors[k])
-  draw_line(pos+Vector2(-11,0),pos+Vector2(-6,0),colors[k],3)
-  draw_line(pos+Vector2(6,0),pos+Vector2(11,0),colors[k],3)
-  text_at(pos+Vector2(14,-9),"卫星甲" if k==0 else "卫星乙",colors[k],12)
- text_at(Vector2(24,size.y-22),"● 卫星甲    发射端",colors[0],11)
- text_at(Vector2(170,size.y-22),"● 卫星乙    接收端",colors[1],11)
- text_at(Vector2(size.x-170,size.y-22),"拖动旋转 · 滚轮缩放",Color("8298b8"),10)
+ for k in range(planes.size()):
+  var points=PackedVector2Array();var sat: Dictionary=planes[k]
+  var period: float=TAU*sqrt(pow(Model.RE+sat.alt,3)/Model.MU)
+  for j in range(181):points.append(project_point(Model.state(sat,j*period/180),center,scale_v))
+  draw_polyline(points,Color(palette[k%8],0.60),1.5,true)
+ var positions: Array=[]
+ for sat in sats:positions.append(project_point(Model.state(sat,row.t),center,scale_v))
+ if not network.is_empty():
+  for k in range(network.links.size()):
+   var link: Dictionary=network.links[k];var valid: bool=link.rows[cursor].valid
+   if k==selected_link:continue
+   draw_line(positions[link.source],positions[link.target],Color(palette[int(sats[link.source].plane)%8],0.25) if valid else Color(0.5,0.6,0.7,0.055),1.0,true)
+  var link: Dictionary=network.links[selected_link]
+  draw_dashed_line(positions[link.source],positions[link.target],Color("fff0ad") if row.valid else Color("f09182"),2.0,7,true)
+ for k in range(sats.size()):
+  var pos: Vector2=positions[k];var sat: Dictionary=sats[k];var color: Color=palette[int(sat.get("plane",k))%8]
+  var highlight=not network.is_empty() and k in [network.links[selected_link].source,network.links[selected_link].target]
+  draw_circle(pos,10 if highlight else 7,Color(color,0.13));draw_circle(pos,4 if highlight else 2.8,color)
+  draw_line(pos+Vector2(-9,0),pos+Vector2(-5,0),color,2);draw_line(pos+Vector2(5,0),pos+Vector2(9,0),color,2)
+  if size.x>650 or highlight:text_at(pos+Vector2(10,-7),sat.get("name","卫星"),color,10)
+ var legend_x=20.0
+ for k in range(planes.size()):
+  if legend_x+80>size.x-16:break
+  text_at(Vector2(legend_x,size.y-18),"● %02d面"%[k+1],palette[k%8],10);legend_x+=70
+ text_at(Vector2(size.x-158,size.y-18),"拖动旋转 · 滚轮缩放",Color("8298b8"),10)
 
 func chart_value(r: Dictionary) -> float:
  match chart:

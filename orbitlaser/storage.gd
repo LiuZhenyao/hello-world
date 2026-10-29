@@ -1,7 +1,8 @@
 extends RefCounted
 const Model=preload("res://model.gd")
+const Constellation=preload("res://constellation.gd")
 static func scenario_json(p: Dictionary) -> String:
- return JSON.stringify({"schema":"orbitlaser.scenario.v1","model":"two-body-one-way-v1","parameters":p},"  ")
+ return JSON.stringify({"schema":"orbitlaser.scenario.v1","model":"multi-plane-one-way-v2" if p.has("planes") else "two-body-one-way-v1","parameters":p},"  ")
 
 static func parse_scenario(text: String) -> Dictionary:
  var decoder=JSON.new()
@@ -9,7 +10,7 @@ static func parse_scenario(text: String) -> Dictionary:
  var parsed=decoder.data
  if not parsed is Dictionary or parsed.get("schema","")!="orbitlaser.scenario.v1" or not parsed.get("parameters") is Dictionary:
   return {"error":"场景格式不受支持。请选择本软件保存的 JSON 场景。"}
- var err=Model.validate(parsed.parameters)
+ var err=Constellation.validate(parsed.parameters) if parsed.parameters.has("planes") else Model.validate(parsed.parameters)
  if err!="":return {"error":err}
  parsed.parameters.seed=int(parsed.parameters.seed)
  return {"params":parsed.parameters}

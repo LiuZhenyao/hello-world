@@ -1,46 +1,37 @@
 # 卫星轨道模拟仿真教学软件
 
-Windows 离线桌面版星间激光测量数据仿真工具，覆盖 LEO 至 GEO 轨道高度。
+全中文、离线 Windows 桌面软件，支持从低轨到地球同步高度的多轨道面、多卫星星间激光测量数据仿真。
 
-**开发分支：[`orbitlaser-development`](https://github.com/LiuZhenyao/hello-world/tree/orbitlaser-development)。所有模块分别提交并推送，`master` 保持不变。**
+## 直接运行
 
-## 下载程序
+[下载 Windows 64 位程序包](releases/卫星轨道模拟仿真教学软件-2.0-Windows-x64.zip) · [下载完整源码](releases/卫星轨道模拟仿真教学软件-2.0-源码.zip)
 
-- [Windows x64 完整包（内含中文名称可执行程序）](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Windows-x64.zip)
-- [完整源码 ZIP](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Source.zip)
-- [校验值和交付文件](https://github.com/LiuZhenyao/hello-world/tree/orbitlaser-development/releases)
-
-下载链接对应本分支实际提交的文件。若仓库为私有，请先登录具有访问权限的 GitHub 账号；也可进入 `releases/` 文件页面点击 Download raw file。下载源码也可使用 GitHub 的 Code → Download ZIP。
-
-Windows 包解压后双击 `卫星轨道模拟仿真教学软件.exe`。内置引擎、中文字体和全部资源，无需安装 Python、Node 或联网；需要 Windows 10/11 x64、OpenGL 3.3 显卡驱动，建议 4 GB 内存。
+解压后双击 `卫星轨道模拟仿真教学软件.exe`。Windows 10/11 x64，显卡驱动支持 OpenGL 3.3，无需安装 Python、Godot 或其他运行工具。
 
 ## 功能
 
-- 双卫星六参数椭圆轨道，LEO-LEO、LEO-GEO、GEO-GEO 预设及任意中间半长轴高度。
-- 双体传播、ECI 轨道、单向光行时迭代、球形地球遮挡。
-- 高斯光束、接收口径、等效 RMS 指向损耗、效率与光子门限。
-- 测距噪声底、单光子定时抖动、固定测距偏差、接收端时钟偏差和随机种子。
-- 中文工作台、可旋转/缩放轨道视图、快照、时间回放、四类科学曲线。
-- 后台计算、进度和取消、参数校验、分页数据表、有效采样窗口。
-- JSON 场景保存/载入、UTF-8 BOM CSV 和带内嵌 SVG 图表的独立 HTML 报告。
-- 最多 50,000 点、最长 48 小时；应用内提供完整模型说明及第三方许可。
+- 2—8 个独立轨道面、每面 2—12 星，总计最多 72 星。
+- 各轨道面独立设置六个轨道参数，支持低轨、中轨、同步高度混合星座。
+- 相邻组网、全互联星对计算；全网统计和逐链路分析。
+- 多星轨道视图、链路高亮、旋转缩放、低轨局部放大、时间回放。
+- 单向光行时、地球遮挡、激光链路与光子预算、伪距噪声及偏差。
+- 后台计算、取消、参数与容量校验、分页数据、曲线与有效窗口。
+- 星座场景保存载入、全网 CSV、独立中文 HTML 报告。
 
-## Windows 重新编译
+默认 3 面 11 星、22 条链路、47,542 条测量记录。完整操作见 [使用说明](docs/USER_GUIDE.md)，测试范围见 [验证记录](docs/VALIDATION.md)。
 
-安装 Godot 4.6.3 Standard、Python 3.10+ 后，在项目根目录运行：
+![软件工作台](releases/界面预览.png)
 
-```powershell
-powershell -File .\scripts\build-windows.ps1 -GodotPath "C:\Tools\Godot\Godot_v4.6.3-stable_win64_console.exe"
+![星座与链路网络](releases/星座网络预览.png)
+
+## 开发与构建
+
+使用 Godot 4.6.3 Standard 打开 `orbitlaser/project.godot`。Windows 重新构建见 [构建说明](docs/BUILD_WINDOWS.md)。
+
+```bash
+python scripts/build.py --godot godot --target windows --package
 ```
 
-完整步骤、离线模板方法及等效 Python 命令见 [Windows 构建说明](docs/BUILD_WINDOWS.md)。输出 `build/OrbitLaser.exe` 和 `releases/OrbitLaser-1.0-Windows-x64.zip`。
+需要 Python 3.10+、固定版本的构建依赖，以及同版本官方 Windows 导出模板。构建脚本先暂存工程，再执行测试、导出、图标写入和内嵌资源包启动检查。
 
-## 验证与边界
-
-Linux 上已通过 24 项数值检查、9 项导入导出检查、18 项真实渲染桌面集成检查。默认场景 2161 点中 1355 条有效测量，残差 RMS 约 0.019795 m。
-
-Windows EXE 由官方模板交叉导出；加载内嵌资源包的检查不等于 Windows 原生运行。本次尚未进行 Windows 真机窗口、DPI、原生文件框与安全软件兼容性验收；程序未数字签名。见 [实际测试记录](docs/VALIDATION.md)。
-
-采用双体与工程链路近似，不含 J2、第三体、相对论、姿态/接收机全动态等高保真因素。适用于概念分析与算法输入研究，不能替代精密任务定轨工具或工程认证。
-
-源码、配置、资源、字体许可、构建工具和测试均保存于此分支。原工作区不可访问且无可恢复文件，本版本根据对话中的完整实现记录重建，而非文件快照恢复。
+采用教学与工程近似模型，不代替高精度任务定轨或工程认证。Linux 下的资源包检查不等于 Windows 原生运行测试。

@@ -10,7 +10,7 @@
 从 GitHub 下载本分支源码 ZIP 并解压，或执行：
 
 ```powershell
-git clone --branch orbitlaser-development https://github.com/LiuZhenyao/hello-world.git
+git clone https://github.com/LiuZhenyao/hello-world.git
 cd hello-world
 ```
 
@@ -22,7 +22,7 @@ cd hello-world
 powershell -File .\scripts\build-windows.ps1 -GodotPath "C:\Tools\Godot\Godot_v4.6.3-stable_win64_console.exe"
 ```
 
-脚本安装构建依赖、从官方 4.6.3 发布包提取 Windows x64 release 模板、导入暂存工程、执行数值/导出/界面测试、导出单文件 EXE、嵌入应用图标、运行本机 headless 启动检查，并生成交付 ZIP。不会修改已跟踪的源码或导出配置。
+脚本安装构建依赖、从官方 4.6.3 发布包提取 Windows x64 release 模板、导入暂存工程、执行数值/星座/导出/界面测试、导出单文件 EXE、嵌入应用图标、运行本机 headless 启动检查，并生成交付 ZIP。不会修改已跟踪的源码或导出配置。
 
 若所在单位限制 PowerShell 脚本，可使用等效 Python 命令，无需修改系统执行策略：
 
@@ -44,8 +44,8 @@ python scripts/build.py --godot "C:\Tools\Godot\Godot_v4.6.3-stable_win64_consol
 ## 输出
 
 - `build/OrbitLaser.exe`：单文件 Windows 桌面程序。
-- `releases/OrbitLaser-1.0-Windows-x64.zip`：可分发成品包。
-- `releases/OrbitLaser-1.0-Source.zip`：完整源码归档（不含引擎/缓存）。
+- `releases/卫星轨道模拟仿真教学软件-2.0-Windows-x64.zip`：可分发成品包。
+- `releases/卫星轨道模拟仿真教学软件-2.0-源码.zip`：完整源码归档（不含引擎/缓存）。
 - `releases/SHA256SUMS.txt`：校验值。
 - `build/logs/`：各阶段日志。
 - `build/build-evidence.json`、`build/packaged-smoke.json`：本次构建与启动检查证据。

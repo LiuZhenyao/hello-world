@@ -29,13 +29,13 @@ static func svg(result: Dictionary,key: String) -> String:
 
 static func html(result: Dictionary) -> String:
  var p: Dictionary=result.params
- var out="<!doctype html><html lang='zh-CN'><meta charset='utf-8'><title>卫星轨道模拟仿真教学软件 · 分析报告</title><style>body{font:15px system-ui,sans-serif;color:#243650;max-width:1000px;margin:50px auto;padding:20px;background:#f5f8fb}h1{color:#008d80}table{border-collapse:collapse;width:100%;background:white}td,th{padding:10px;border:1px solid #dae2eb;text-align:left}pre{white-space:pre-wrap;background:white;padding:20px}.tag{color:#7c8a9d}svg{background:white;border-radius:12px}</style><h1>卫星轨道模拟仿真教学软件</h1><h2>星间激光测量仿真分析报告</h2><p class='tag'>模型：双体轨道 / 单向 甲 → 乙 / 相对历元 · 软件版本 1.0.0</p>"
- out+="<table><tr><th>总采样</th><th>有效测量</th><th>占比</th><th>残差均值 / m</th><th>残差 RMS / m</th><th>残差标准差 / m</th></tr><tr><td>%d</td><td>%d</td><td>%.2f%%</td><td>%s</td><td>%s</td><td>%s</td></tr></table>"%[result.count,result.valid,100.0*result.valid/result.count,number(result.mean),number(result.rms),number(result.stddev)]
+ var out="<!doctype html><html lang='zh-CN'><meta charset='utf-8'><title>卫星轨道模拟仿真教学软件 · 分析报告</title><style>body{font:15px system-ui,sans-serif;color:#243650;max-width:1000px;margin:50px auto;padding:20px;background:#f5f8fb}h1{color:#008d80}table{border-collapse:collapse;width:100%;background:white}td,th{padding:10px;border:1px solid #dae2eb;text-align:left}pre{white-space:pre-wrap;background:white;padding:20px}.tag{color:#7c8a9d}svg{background:white;border-radius:12px}</style><h1>卫星轨道模拟仿真教学软件</h1><h2>星间激光测量仿真分析报告</h2><p class='tag'>模型：双体轨道 / 单向星间测量 / 相对历元 · 软件版本 2.0.0</p>"
+ out+="<table><tr><th>总采样</th><th>有效测量</th><th>占比</th><th>残差均值 / m</th><th>残差均方根 / m</th><th>残差标准差 / m</th></tr><tr><td>%d</td><td>%d</td><td>%.2f%%</td><td>%s</td><td>%s</td><td>%s</td></tr></table>"%[result.count,result.valid,100.0*result.valid/result.count,number(result.mean),number(result.rms),number(result.stddev)]
  out+="<p>几何距离 %.3f–%.3f km；距离率 %.3f–%.3f m/s。无遮挡采样 %d 点。</p>"%[result.min_range/1000,result.max_range/1000,result.min_rate,result.max_rate,result.visible]
- out+="<h2>轨道输入</h2><table><tr><th>卫星</th><th>半长轴高度 / km</th><th>偏心率</th><th>倾角 / °</th><th>RAAN / °</th><th>近地点幅角 / °</th><th>平近点角 / °</th></tr>"
+ out+="<h2>轨道输入</h2><table><tr><th>卫星</th><th>半长轴高度 / km</th><th>偏心率</th><th>倾角 / °</th><th>升交点赤经 / °</th><th>近地点幅角 / °</th><th>平近点角 / °</th></tr>"
  for sat in ["a","b"]:
   var s: Dictionary=p[sat]
-  out+="<tr><td>%s</td><td>%.3f</td><td>%.6f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>"%[sat.to_upper(),s.alt,s.ecc,s.inc,s.raan,s.arg,s.phase]
+  out+="<tr><td>%s</td><td>%.3f</td><td>%.6f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>"%[p.get("a",{}).get("name","发射星") if sat=="a" else p.get("b",{}).get("name","接收星"),s.alt,s.ecc,s.inc,s.raan,s.arg,s.phase]
  out+="</table><h2>距离变化 / km</h2>"+svg(result,"range")+"<h2>有效测量残差 / m</h2>"+svg(result,"error")
  out+="<h2>有效采样窗口</h2><table><tr><th>窗口</th><th>起始 / s</th><th>结束 / s</th><th>端点间隔 / s</th></tr>"
  for j in range(result.windows.size()):

@@ -51,6 +51,7 @@ def main():
     run('import',['--headless','--editor','--path',stage,'--import','--quit'])
     if not args.skip_tests:
         run('model',['--headless','--path',stage,'--script','tests/test_model.gd'])
+        run('constellation',['--headless','--path',stage,'--script','tests/test_constellation.gd'])
         run('export-tests',['--headless','--path',stage,'--script','tests/test_export.gd'])
         run('ui-headless',['--headless','--path',stage,'--script','tests/test_ui.gd','--','--output='+str(build/'validation')])
     output=build/('OrbitLaser.exe' if args.target=='windows' else 'OrbitLaser-linux.x86_64')
