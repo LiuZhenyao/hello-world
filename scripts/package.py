@@ -19,17 +19,17 @@ def main():
     windows=RELEASES/'OrbitLaser-1.0-Windows-x64.zip'
     source=RELEASES/'OrbitLaser-1.0-Source.zip'
     with zipfile.ZipFile(windows,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
-        z.write(exe,'OrbitLaser/OrbitLaser.exe')
-        for p in sorted((ROOT/'docs').glob('*.md')):z.write(p,'OrbitLaser/'+p.name)
-        for p in sorted((ROOT/'orbitlaser/licenses').glob('*.txt')):z.write(p,'OrbitLaser/licenses/'+p.name)
+        z.write(exe,'卫星轨道模拟仿真教学软件/卫星轨道模拟仿真教学软件.exe')
+        for p in sorted((ROOT/'docs').glob('*.md')):z.write(p,'卫星轨道模拟仿真教学软件/'+p.name)
+        for p in sorted((ROOT/'orbitlaser/licenses').glob('*.txt')):z.write(p,'卫星轨道模拟仿真教学软件/许可/'+p.name)
         for name in ['LEO-GEO.json','example-measurements.csv','example-report.html','OrbitLaser-workbench.png','OrbitLaser-data.png','ui-validation.json']:
             p=BUILD/'validation'/name
-            if p.is_file():z.write(p,'OrbitLaser/examples/'+name)
+            if p.is_file():z.write(p,'卫星轨道模拟仿真教学软件/示例/'+name)
         for name in ['build-evidence.json','packaged-smoke.json']:
             p=BUILD/name
-            if p.is_file():z.write(p,'OrbitLaser/validation/'+name)
+            if p.is_file():z.write(p,'卫星轨道模拟仿真教学软件/验证记录/'+name)
         for p in sorted((BUILD/'logs').glob('*.log')):
-            if p.stat().st_size<1024*1024:z.write(p,'OrbitLaser/validation/logs/'+p.name)
+            if p.stat().st_size<1024*1024:z.write(p,'卫星轨道模拟仿真教学软件/验证记录/日志/'+p.name)
     excluded={'.git','.build','build','releases','__pycache__','.godot'}
     with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
         for p in sorted(ROOT.rglob('*')):
@@ -43,7 +43,7 @@ def main():
         names=set(z.namelist())
         for rel in ['orbitlaser/app.gd','orbitlaser/model.gd','orbitlaser/assets/ui.ttc','orbitlaser/export_presets.cfg','scripts/build-windows.ps1','scripts/requirements-build.txt','README.md','docs/BUILD_WINDOWS.md']:
             assert 'OrbitLaser-source/'+rel in names,rel
-    records=[(windows,windows.name),(source,source.name),(exe,'OrbitLaser.exe (inside Windows ZIP)')]
+    records=[(windows,windows.name),(source,source.name),(exe,'卫星轨道模拟仿真教学软件/卫星轨道模拟仿真教学软件.exe')]
     (RELEASES/'SHA256SUMS.txt').write_text(''.join(digest(p)+'  '+name+'\n' for p,name in records),encoding='utf-8')
     for p,name in records:print(name,p.stat().st_size,'bytes',digest(p))
 if __name__=='__main__':main()

@@ -93,8 +93,8 @@ func _ready():
  content=vbox(12);expand(content);workspace.add_child(content)
  build_overview();build_data_page();build_method_page();build_config(workspace)
  var foot=hbox();main.add_child(foot);status=label("就绪 · 本地计算，数据不上传",11,MUTED);foot.add_child(status);spacer(foot)
- foot.add_child(label("WGS-84 / ECI    |    OrbitLaser 1.0",11,MUTED))
- notice=AcceptDialog.new();notice.title="星衡 OrbitLaser";notice.min_size=Vector2i(480,170);add_child(notice)
+ foot.add_child(label("地心惯性坐标    |    版本 1.0",11,MUTED))
+ notice=AcceptDialog.new();notice.title="卫星轨道模拟仿真教学软件";notice.min_size=Vector2i(480,170);add_child(notice)
  file_dialog=FileDialog.new();file_dialog.access=FileDialog.ACCESS_FILESYSTEM;file_dialog.use_native_dialog=true
  file_dialog.file_selected.connect(on_file);add_child(file_dialog)
  if DirAccess.dir_exists_absolute(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)):last_folder=OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
@@ -102,20 +102,20 @@ func _ready():
 
 func build_sidebar(root: HBoxContainer):
  var body=vbox(10);var side=panel(body,NAVY);side.custom_minimum_size.x=174;root.add_child(side)
- body.add_child(label("◈  星衡",27,Color.WHITE));body.add_child(label("ORBITLASER",12,Color("70d9c5")))
- body.add_child(label("星间激光测量仿真",11,Color("92a8c7")))
+ body.add_child(label("卫星轨道模拟\n仿真教学软件",20,Color.WHITE))
+ body.add_child(label("轨道与星间激光测量",11,Color("92a8c7")))
  var gap=Control.new();gap.custom_minimum_size.y=34;body.add_child(gap)
  for i in range(3):
   var b=button(["◉   仿真工作台","▤   测量数据","◇   模型与说明"][i],set_page.bind(i))
   b.alignment=HORIZONTAL_ALIGNMENT_LEFT;body.add_child(b);nav_buttons.append(b)
  var flex=Control.new();flex.size_flags_vertical=Control.SIZE_EXPAND_FILL;body.add_child(flex)
  body.add_child(label("全离线 · 可复现实验",11,Color("8fa8c6")))
- body.add_child(label("LEO  →  MEO  →  GEO",10,Color("6c88ae")))
+ body.add_child(label("低轨  →  中轨  →  同步轨道",10,Color("6c88ae")))
  body.add_child(label("工程分析工具 / v1.0",10,Color("6c88ae")))
 
 func build_header(main: VBoxContainer):
  var row=hbox();main.add_child(row);var titles=vbox(2);row.add_child(titles)
- page_title=label("星间激光测量仿真",25);titles.add_child(page_title)
+ page_title=label("卫星轨道模拟仿真教学软件",25);titles.add_child(page_title)
  titles.add_child(label("从轨道几何到测量数据，构建可复现的星间链路实验。",12,MUTED))
  spacer(row);row.add_child(button("打开场景",open_dialog.bind("load")));row.add_child(button("保存场景",open_dialog.bind("save")))
  row.add_child(button("导出结果",open_dialog.bind("csv"),true))
@@ -123,7 +123,7 @@ func build_header(main: VBoxContainer):
 func build_overview():
  var page=vbox(12);page.size_flags_vertical=Control.SIZE_EXPAND_FILL;content.add_child(page);pages.append(page)
  var kpis=hbox(10);page.add_child(kpis)
- for title in ["有效测量占比","星间距离 / km","残差 RMS","有效采样点"]:
+ for title in ["有效测量占比","星间距离 / km","残差均方根","有效采样点"]:
   var col=vbox(4);col.add_child(label(title,11,MUTED));var value=label("—",21);col.add_child(value);cards.append(value)
   var pc=panel(col);expand(pc);kpis.add_child(pc)
  var viewport_row=hbox(12);viewport_row.size_flags_vertical=Control.SIZE_EXPAND_FILL;page.add_child(viewport_row)
@@ -175,7 +175,7 @@ func build_method_page():
  var body=vbox(14);expand(body);sc.add_child(body);body.add_child(label("模型、单位与适用范围",23))
  var sections=[
  ["01  轨道传播","WGS-84 赤道半径 6378.137 km，引力常数 μ = 398600.4418 km³/s²。开普勒方程双体椭圆轨道传播，统一采用地心惯性坐标系 ECI。高度为半长轴减地球半径；初始相位为 t = 0 的平近点角。RAAN、近地点幅角和倾角以度表示。场景时间为相对历元，不映射具体 UTC。"],
- ["02  单向激光测量","A 在 t 发射，B 在 t + τ 接收。迭代求解 τ = |rB(t+τ) − rA(t)| / c 得到光行时路径。几何距离及距离率使用同一时刻的位置与速度。地球遮挡以发射至接收位置的线段与球形地球相交判定。轨道视图为同一时刻的轨道位置示意，不作为光行时路径图。"],
+ ["02  单向激光测量","卫星甲在 t 发射，卫星乙在 t + τ 接收。迭代求解 τ = |rB(t+τ) − rA(t)| / c 得到光行时路径。几何距离及距离率使用同一时刻的位置与速度。地球遮挡以发射至接收位置的线段与球形地球相交判定。轨道视图为同一时刻的轨道位置示意，不作为光行时路径图。"],
  ["03  链路与光子预算","高斯远场光斑 w = R·θ，θ 为 1/e² 强度半角。接收口径截获比例 1 − exp[−2(D/2w)²]。等效固定指向损耗 exp[−2(j/θ)²]，j 为输入的 RMS 指向角工程近似。总效率包含光学与探测效率。光子数 N = Pr·min(采样步长, 1 s)/(hc/λ)。无遮挡且 N 达到门限时记录有效测量。假定理想捕获跟踪，不建模捕获视场与终端转动限制。"],
  ["04  测量噪声与偏差","单向伪距 = 光行时路径 + 固定偏差 + c·时钟偏差 + 高斯白噪声。噪声标准差 sqrt[σ₀² + (c·σt/√N)²]，σt 为等效单光子定时抖动。这里不使用双程测距的 1/2 因子。残差相对于光行时路径；RMS 包含系统偏差。固定随机种子可复现相同数据，仅有效测量参与误差统计。"],
  ["05  数据与复现","场景 JSON 保存完整输入参数和模型版本；CSV 使用 UTF-8 BOM 和 SI 单位，便于 Excel、Python 或 MATLAB 读取。独立 HTML 报告包含参数、统计、曲线和有效采样窗口。窗口端点是有效采样时刻，不是连续可见性的精确边界。所有计算和导出均在本地完成。"],
@@ -189,12 +189,12 @@ func build_method_page():
 func build_config(workspace: HBoxContainer):
  var col=vbox(10);col.custom_minimum_size.x=292;var pc=panel(col);pc.custom_minimum_size.x=320;workspace.add_child(pc)
  col.add_child(label("场景配置",18));presets=OptionButton.new()
- for s in ["LEO → GEO · 跨高度链路","LEO → LEO · 同轨编队","GEO → GEO · 同步轨道"]:presets.add_item(s)
+ for s in ["低轨 → 同步轨道 · 跨高度链路","低轨 → 低轨 · 同轨编队","同步轨道 → 同步轨道"]:presets.add_item(s)
  presets.item_selected.connect(apply_preset);col.add_child(presets)
  var scroll=ScrollContainer.new();scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;col.add_child(scroll)
  config_panel=vbox(9);expand(config_panel);scroll.add_child(config_panel)
  for sat in ["a","b"]:
-  config_panel.add_child(label("SAT "+sat.to_upper()+("  /  发射端" if sat=="a" else "  /  接收端"),13,TEAL))
+  config_panel.add_child(label("卫星"+("甲" if sat=="a" else "乙")+("  /  发射端" if sat=="a" else "  /  接收端"),13,TEAL))
   add_field(sat+".alt","半长轴高度","km",160,35786,1,params[sat].alt)
   add_field(sat+".ecc","偏心率","",0,0.5,0.0001,params[sat].ecc)
   add_field(sat+".inc","轨道倾角","°",0,180,0.1,params[sat].inc)
@@ -208,7 +208,7 @@ func build_config(workspace: HBoxContainer):
  add_field("wave","激光波长","nm",400,2000,1,params.wave)
  add_field("aperture","接收口径","m",0.01,2,0.01,params.aperture)
  add_field("divergence","光束半角","μrad",0.1,1000,0.1,params.divergence)
- add_field("jitter","RMS 指向角","μrad",0,1000,0.1,params.jitter)
+ add_field("jitter","均方根指向角","μrad",0,1000,0.1,params.jitter)
  add_field("efficiency","总探测效率","",0.001,1,0.001,params.efficiency)
  add_field("threshold","光子数门限","",1,1e12,1,params.threshold)
  config_panel.add_child(label("测量噪声与偏差",13,TEAL))
@@ -257,7 +257,7 @@ func set_page(index: int):
  for j in range(nav_buttons.size()):
   nav_buttons[j].add_theme_stylebox_override("normal",box(Color("233e58") if j==index else NAVY,7))
   nav_buttons[j].add_theme_color_override("font_color",Color("69dfc8") if j==index else Color("9fb3cf"))
- if page_title!=null:page_title.text=["星间激光测量仿真","测量数据与分析","模型与使用说明"][index]
+ if page_title!=null:page_title.text=["卫星轨道模拟仿真教学软件","测量数据与分析","模型与使用说明"][index]
 
 func set_busy(value: bool):
  busy=value;run_button.disabled=value;cancel_button.disabled=not value;presets.disabled=value
@@ -363,7 +363,7 @@ func open_dialog(action: String):
  file_dialog.filters=PackedStringArray(["*."+extension+" ; "+extension.to_upper()+" 文件"])
  file_dialog.title={"load":"打开场景","save":"保存场景参数","csv":"导出当前计算结果","report":"导出分析报告"}[action]
  if last_folder!="":file_dialog.current_dir=last_folder
- if action!="load":file_dialog.current_file="OrbitLaser_"+Time.get_datetime_string_from_system().replace(":","-")+"."+extension
+ if action!="load":file_dialog.current_file="卫星轨道模拟仿真_"+Time.get_datetime_string_from_system().replace(":","-")+"."+extension
  file_dialog.popup_centered_ratio(0.7)
 
 func on_file(path: String):
@@ -386,10 +386,10 @@ func on_file(path: String):
  status.text="已保存："+path+(" · 导出的是上次计算结果" if dirty and file_action!="save" else "")
 
 func show_licenses():
- var dialog=AcceptDialog.new();dialog.title="OrbitLaser 1.0 · 第三方组件许可";dialog.min_size=Vector2i(800,600)
+ var dialog=AcceptDialog.new();dialog.title="卫星轨道模拟仿真教学软件 · 第三方组件许可";dialog.min_size=Vector2i(800,600)
  var text_view=RichTextLabel.new();text_view.custom_minimum_size=Vector2(760,500);text_view.add_theme_color_override("default_color",INK)
  text_view.add_theme_font_size_override("normal_font_size",12)
- var text="星衡 OrbitLaser 1.0\n离线星间激光测量仿真工具\n\n"
+ var text="卫星轨道模拟仿真教学软件 版本 1.0\n离线星间激光测量仿真工具\n\n"
  for path in ["res://licenses/Godot-LICENSE.txt","res://licenses/Godot-COPYRIGHT.txt","res://licenses/Noto-CJK-copyright.txt"]:
   if FileAccess.file_exists(path):text+="\n"+path.get_file()+"\n"+FileAccess.get_file_as_string(path)+"\n"
  text_view.text=text;dialog.add_child(text_view);dialog.close_requested.connect(dialog.queue_free);dialog.confirmed.connect(dialog.queue_free)

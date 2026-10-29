@@ -56,8 +56,8 @@ func draw_orbit():
  for n in range(90):
   var pt=Vector2(fposmod(n*137.19+41,size.x),fposmod(n*83.73+19,size.y))
   draw_circle(pt,0.6 if n%3 else 1.1,Color(0.53,0.66,0.84,0.22))
- text_at(Vector2(24,29),"惯性空间 / ECI",Color("dbe8ff"),14)
- text_at(Vector2(24,50),"双体传播 · 单向 A → B",Color("8298b8"),11)
+ text_at(Vector2(24,29),"地心惯性空间",Color("dbe8ff"),14)
+ text_at(Vector2(24,50),"双体传播 · 单向 甲 → 乙",Color("8298b8"),11)
  if parameters.is_empty():return
  var center=Vector2(size.x*0.5,size.y*0.53)
  var outer: float=max((6378.137+parameters.a.alt)*(1+parameters.a.ecc),(6378.137+parameters.b.alt)*(1+parameters.b.ecc))
@@ -92,9 +92,9 @@ func draw_orbit():
   draw_circle(pos,12,Color(colors[k],0.12));draw_circle(pos,4.5,colors[k])
   draw_line(pos+Vector2(-11,0),pos+Vector2(-6,0),colors[k],3)
   draw_line(pos+Vector2(6,0),pos+Vector2(11,0),colors[k],3)
-  text_at(pos+Vector2(14,-9),"SAT A" if k==0 else "SAT B",colors[k],12)
- text_at(Vector2(24,size.y-22),"● SAT A    发射端",colors[0],11)
- text_at(Vector2(170,size.y-22),"● SAT B    接收端",colors[1],11)
+  text_at(pos+Vector2(14,-9),"卫星甲" if k==0 else "卫星乙",colors[k],12)
+ text_at(Vector2(24,size.y-22),"● 卫星甲    发射端",colors[0],11)
+ text_at(Vector2(170,size.y-22),"● 卫星乙    接收端",colors[1],11)
  text_at(Vector2(size.x-170,size.y-22),"拖动旋转 · 滚轮缩放",Color("8298b8"),10)
 
 func chart_value(r: Dictionary) -> float:

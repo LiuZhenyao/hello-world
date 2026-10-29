@@ -1,12 +1,12 @@
-# 已构建程序与源码归档
+# 卫星轨道模拟仿真教学软件：程序与源码归档
 
 本目录保存的是实际提交至 GitHub 的二进制 ZIP，不是工作区内部链接，也不依赖 GitHub Actions 临时附件。
 
-- [下载 Windows x64 程序包](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Windows-x64.zip)：53,061,901 字节（约 50.6 MiB）。
-- [下载完整源码包](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Source.zip)：15,596,672 字节（约 14.9 MiB）。
+- [下载 Windows x64 程序包](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Windows-x64.zip)：约 50.6 MiB。
+- [下载完整源码包](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Source.zip)：约 14.9 MiB。
 - [SHA256 校验值](SHA256SUMS.txt)。
 
-**运行：解压 Windows ZIP，打开 `OrbitLaser` 文件夹，双击 `OrbitLaser.exe`。** EXE 大小 121,114,296 字节，内置引擎和全部运行资源。包内还包括使用/构建说明、许可、示例场景、CSV、HTML 报告、截图及验证证据。
+**运行：解压 Windows ZIP，打开 `卫星轨道模拟仿真教学软件` 文件夹，双击 `卫星轨道模拟仿真教学软件.exe`。** EXE 大小 约 116 MiB，内置引擎和全部运行资源。包内还包括使用/构建说明、许可、示例场景、CSV、HTML 报告、截图及验证证据。
 
 若浏览器显示二进制文件页面，点击 Download raw file；私有仓库需登录有权限的 GitHub 账号。也可以下载整个分支的 Code → Download ZIP，解压后进入 releases/ 再解压程序包。
 

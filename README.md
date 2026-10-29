@@ -1,4 +1,4 @@
-# 星衡 OrbitLaser
+# 卫星轨道模拟仿真教学软件
 
 Windows 离线桌面版星间激光测量数据仿真工具，覆盖 LEO 至 GEO 轨道高度。
 
@@ -6,13 +6,13 @@ Windows 离线桌面版星间激光测量数据仿真工具，覆盖 LEO 至 GEO
 
 ## 下载程序
 
-- [Windows x64 完整包（内含 OrbitLaser.exe）](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Windows-x64.zip)
+- [Windows x64 完整包（内含中文名称可执行程序）](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Windows-x64.zip)
 - [完整源码 ZIP](https://github.com/LiuZhenyao/hello-world/raw/refs/heads/orbitlaser-development/releases/OrbitLaser-1.0-Source.zip)
 - [校验值和交付文件](https://github.com/LiuZhenyao/hello-world/tree/orbitlaser-development/releases)
 
 下载链接对应本分支实际提交的文件。若仓库为私有，请先登录具有访问权限的 GitHub 账号；也可进入 `releases/` 文件页面点击 Download raw file。下载源码也可使用 GitHub 的 Code → Download ZIP。
 
-Windows 包解压后双击 `OrbitLaser.exe`。内置引擎、中文字体和全部资源，无需安装 Python、Node 或联网；需要 Windows 10/11 x64、OpenGL 3.3 显卡驱动，建议 4 GB 内存。
+Windows 包解压后双击 `卫星轨道模拟仿真教学软件.exe`。内置引擎、中文字体和全部资源，无需安装 Python、Node 或联网；需要 Windows 10/11 x64、OpenGL 3.3 显卡驱动，建议 4 GB 内存。
 
 ## 功能
 
